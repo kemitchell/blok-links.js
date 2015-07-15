@@ -1,6 +1,9 @@
 var isArray = require('is-array')
 var isObject = require('is-object')
 
+function has(array, value) {
+  return array.indexOf(value) > -1 }
+
 function links(list, isHash, argument) {
   if (isObject(argument)) {
     return Object.keys(argument)
@@ -15,17 +18,15 @@ function links(list, isHash, argument) {
           return links([], isHash, element)
             .reduce(
               function(list, element) {
-                if (list.indexOf(element) < 0) {
-                  return list.concat(element) }
-                else {
-                  return list } },
+                return (
+                  has(list, element) ?
+                    list : list.concat(element) ) },
               list) },
         list) }
   else if (typeof argument === 'string') {
-    if (isHash(argument) && list.indexOf(argument) < 0) {
-      return list.concat(argument) }
-    else {
-      return list } }
+    return (
+      ( isHash(argument) && !has(list, argument) ) ?
+      list.concat(argument) : list ) }
   return [] } 
 
 function blokLinks(isHash, argument) {
